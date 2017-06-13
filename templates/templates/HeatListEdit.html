@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<link href="{% static "css/jquery-ui.min.css" %}" rel="stylesheet">
+<style>
+.dragblock {
+    list-style: none;
+    min-height: 5em;
+    padding: 0;
+    margin: 0;
+    background: lightblue;
+}
+
+.dragbutton {
+    height: 5em;
+    width:100%;
+}
+
+.dragblock-placeholder {
+    height: 5em;
+}
+
+td {
+    vertical-align: top;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+<h1>Heats for {{ dance }}</h1>
+<h3>Drag to reorder</h3>
+<button class="button success" onclick="saveall();">Save</button>
+<table class="table">
+<thead>
+<tr>
+    {% for heat in heats %}
+    <th>Heat {{ heat.Number }}</th>
+    {% endfor %}
+    <th>Unbounded Pairs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    {% for heat in heats %}
+    <td style="width:33%;">
+        <ul id="heat{{ heat.Number }}" class="dragblock heatblock" data-heat="{{ heat.id }}">
+        {% for pair in heat.Persons.all %}
+            <li class="ui-state-default" data-pair="{{ pair.id }}"><div class="button primary dragbutton">{{ pair }}</div></li>
+        {% endfor %}
+        </ul>
+    </td>
+    {% endfor %}
+    <td style="width:33%;">
+        <ul id="unbounded" class="dragblock unboundblock">
+         {% for pair in unboundpairs %}
+            <li class="ui-state-default" data-pair="{{ pair.id }}"><div class="button primary dragbutton">{{ pair }}</div></li>
+        {% endfor %}
+        </ul>
+    </td>
+</tr>
+</tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static "js/jquery-ui.min.js" %}"></script>
+<script src="{% static "js/csrf-ajax.js" %}"></script>
+  <script>
+  $( function() {
+      {% for heat in heats %}
+        $( "#heat{{ heat.Number }}" ).sortable({
+        connectWith: "ul",
+        placeholder: "dragblock-placeholder"
+        }).disableSelection();
+      {% endfor %}
+      $( "#unbounded" ).sortable({
+        connectWith: "ul",
+        placeholder: "dragblock-placeholder"
+      }).disableSelection();
+  } );
+
+
+  function saveall() {
+    $.Notify({
+        caption: "Parsing...",
+        content: "Creating the data to send to the server",
+        icon: "mif-loading",
+        type: "info"
+    });
+    var ulheats = document.getElementsByClassName("heatblock");
+    var data = {};
+    for(var i = 0; i < ulheats.length; i++)
+    {
+        var pairs = [];
+        for(var j = 0; j < ulheats[i].children.length; j++)
+        {
+            pairs.push($(ulheats[i].children[j]).data('pair'));
+        }
+            data[$(ulheats[i]).data('heat')] = pairs;
+    }
+    var unboundedul = document.getElementsByClassName("unboundblock")[0];
+    pairs = [];
+    for(i = 0; i < unboundedul.children.length; i++)
+    {
+        pairs.push($(unboundedul.children[i]).data('pair'));
+    }
+    data['unbounded'] = pairs;
+    $.Notify({
+        caption: "Sending...",
+        content: "Sending data to the server",
+        type: "info"
+    });
+    console.log(JSON.stringify(data));
+
+    $.post("{% url 'afdansen:heateditlistdance' dance.id %}", {"jsondata" : JSON.stringify(data)}, function(data){
+        if(data.type == 'success')
+        {
+            $.Notify({
+                caption: "Data Saved!",
+                content: "Saved!",
+                type: "success"
+            });
+        }
+        else
+        {
+            $.Notify({
+                caption: "Error Occured!",
+                content: "Data could not be saved, please refresh page.",
+                type: "error"
+            });
+        }
+    }, "json");
+
+    }
+  </script>
+{% endblock %}

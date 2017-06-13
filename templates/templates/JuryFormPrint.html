@@ -1,0 +1,41 @@
+{% extends 'BaseBasic.html' %}
+
+{% block body %}
+<h1>Jury Page for {{ dance }} heat {{ heat }}</h1>
+<table class="table border bordered">
+<thead>
+<tr>
+    <th>Pair</th>
+    {% for subdance in subdances %}
+        <th>{{ subdance }}</th>
+    {% endfor %}
+</tr>
+</thead>
+{% for pair in pairs %}
+<tr>
+    <td style="border-bottom-style:hidden;">
+        M{{ pair.BackNumber }}
+    </td>
+    {% for subdance in subdances %}
+    <td style="border-bottom-style:hidden;">
+        <div class="input-control text" style="width:100%!important;">
+            <input id="M{{ pair.id }}_{{ subdance.id }}" type="number" min="5" max="10" step="0.5"/>
+        </div>
+    </td>
+    {% endfor %}
+</tr>
+<tr>
+    <td>
+        V{{ pair.BackNumber }}
+    </td>
+    {% for subdance in subdances %}
+    <td>
+        <div class="input-control text" style="width:100%!important;">
+            <input id="V{{ pair.id }}_{{ subdance.id }}" type="number" min="5" max="10" step="0.5"/>
+        </div>
+    </td>
+    {% endfor %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

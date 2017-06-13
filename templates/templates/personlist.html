@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+<h1>Persons List</h1>
+{% block body %}
+<table class="table bordered hovered striped" id="persontable">
+<thead>
+    <tr>
+        <th>First Name</th>
+        <th>Prefix</th>
+        <th>Last Name</th>
+        <th>Pairs</th>
+        <th>Buttons</th>
+    </tr>
+</thead>
+<tbody>
+{% for person in persons %}
+    <tr>
+        <td>{{ person.FirstName }}</td>
+        <td>{{ person.Prefix }}</td>
+        <td>{{ person.LastName }}</td>
+        <td>
+            {% if person.pairs_leading.count == 0 and person.pairs_following.count == 0%}
+                <span class="mif-cross fg-red"></span>
+            {% else %}
+                <ul>
+                {% if person.pairs_leading.count != 0 %}
+                    {% for pair in person.pairs_leading.all %}
+                    <li>M{{ pair.BackNumber }}</li>
+                    {% endfor %}
+                {% endif %}
+                {% if person.pairs_following.count != 0 %}
+                    {% for pair in person.pairs_following.all %}
+                    <li>V{{ pair.BackNumber }}</li>
+                    {% endfor %}
+                {% endif %}
+                </ul>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'afdansen:personedit' person.id %}" class="button primary">Edit</a>
+            <a href="{% url 'afdansen:persondelete' person.id %}" class="button danger">Delete</a>
+        </td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+
+    <script>
+    $(document).ready(function() {
+
+	 var options = {
+	        "pageLength": 100,
+            'order' : [],
+             "columns": [
+                    null,
+                    null,
+                    null,
+                    null,
+                 null
+              ],
+            initComplete: function () {
+            this.api().columns([]).every( function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.header()) )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+        }
+        }
+        $('#persontable').DataTable(options);
+	     //for datatables, do not sort the table when clicking a select.
+    $("th>select").click(function () {
+        return false;
+    })
+    });
+
+</script>
+
+{% endblock %}

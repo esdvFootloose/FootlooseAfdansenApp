@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+Welcome to the footloose dancing exams administration!
+{% if user.is_authenticated %}
+To start, please use the navigation menu on the top of the page.
+{% else %}
+To start please log in first.
+{% endif %}
+{% endblock %}

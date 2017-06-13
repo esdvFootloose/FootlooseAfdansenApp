@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Choose Dance</h1>
+<table class="table bordered hovered striped" id="dancetable" style="width:75%;">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Button</th>
+        </tr>
+        </thead>
+<tbody>
+{% for dance in dances %}
+<tr>
+<td style="width:50%;">{{ dance }}</td>
+<td><a href="{% url 'afdansen:heateditlistdance' dance.id %}" class="button primary">Edit</a> </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

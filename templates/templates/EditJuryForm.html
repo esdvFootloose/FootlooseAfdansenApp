@@ -1,0 +1,23 @@
+{% extends "GenericForm.html" %}
+{% block scripts %}
+{{ block.super }}
+
+<script>
+$(document).ready(function() {
+    $('#id_Jury').on('change', function () {
+        $.get("{% url 'api:getcurrentjuried' %}" + String($(this).val()) + '/', function(data) {
+            console.log(data);
+            var lst = data;
+
+            if(lst.length == 0)
+            {
+                $('#id_Dances').select2('val', ['']);
+            }
+            else {
+                $('#id_Dances').val(lst).trigger('change');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

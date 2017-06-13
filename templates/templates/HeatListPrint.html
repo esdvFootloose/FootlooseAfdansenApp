@@ -1,0 +1,46 @@
+{% extends 'BaseBasic.html' %}
+
+{% block stylesheets %}
+<style>
+h1,
+h2
+{
+    color: crimson;
+}
+
+h3
+{
+    color: darkred;
+}
+
+td
+{
+    width: 50%;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<h1>All Heats</h1>
+{% for dance in dances %}
+{% if dance.heats.count > 0 %}
+<h2>{{ dance }}</h2>
+{% for heat in dance.heats.all %}
+    <h3>{{ heat.short_str }}</h3>
+    <table class="table bordered border striped hovered">
+    <thead>
+    <tr>
+        <th>BackNumber</th><th>Pair</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for pair in heat.Persons.all %}
+        <tr><td>{{ pair.BackNumber }}</td><td>{{ pair }}</td></tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endfor %}
+
+{% endif %}
+{% endfor %}
+{% endblock %}

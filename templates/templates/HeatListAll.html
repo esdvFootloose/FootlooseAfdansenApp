@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<style>
+h1,
+h2
+{
+    color: crimson;
+}
+
+h3
+{
+    color: darkred;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<h1>All Heats</h1>
+{% for dance in dances %}
+{% if dance.heats.count > 0 %}
+<h2>{{ dance }}</h2>
+<div class="grid">
+<div class="row cells{{ dance.heats.count }}">
+    {% for heat in dance.heats.all %}
+        <div class="cell">
+            {% if user.is_staff %}
+            <div style="float: left;">
+            <h3>{{ heat.short_str }}</h3>
+            </div>
+            <div style="float: right;">
+                <a href="{% url 'afdansen:printjuryform' dance.id heat.id %}" class="button primary">Print JuryForm</a>
+            </div>
+            {% else %}
+            <h3>{{ heat.short_str }}</h3>
+            {% endif %}
+            <table class="table bordered border striped hovered">
+            <thead>
+            <tr>
+                <th>BackNumber</th><th>Pair</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for pair in heat.Persons.all %}
+                <tr><td>{{ pair.BackNumber }}</td><td>{{ pair }}</td></tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    {% endfor %}
+</div>
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}

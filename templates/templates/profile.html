@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+    <h1>Profile</h1>
+    <table class="table">
+    <tr><td>Name:</td><td>{{ user.get_full_name }}</td></tr>
+    <tr><td>Email:</td><td>{{ user.email }}</td></tr>
+    <tr><td>User is staff:</td><td><span class="mif-{{ user.is_staff|yesno:"checkmark fg-green,cross fg-red" }}"></span></td></tr>
+    <tr><td>User is admin:</td><td><span class="mif-{{ user.is_superuser|yesno:"checkmark fg-green,cross fg-red" }}"></span></td></tr>
+    <tr><td>Jury for dances:</td><td>
+        {% if request.user.jury.count == 0 %}
+            <span class="mif-cross fg-red"></span>
+        {% else %}
+        <ul>
+        {% for dance in request.user.jury.all %}
+            <li>{{ dance }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </td></tr>
+    </table>
+{% endblock %}
