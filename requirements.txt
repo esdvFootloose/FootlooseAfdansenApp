@@ -6,3 +6,4 @@ django-redis
 channels
 asgi_redis
 daphne
+django-user_agents

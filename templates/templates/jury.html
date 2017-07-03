@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
+
 {% block body %}
-<h1>Jury Page for {{ dance }} heat {{ heat }}</h1>
+<h1>Jury Page for {{ dance }} heat {{ heat.Number }}</h1>
 <table class="table border bordered">
 <thead>
 <tr>
@@ -18,7 +20,7 @@
     {% for subdance in subdances %}
     <td style="border-bottom-style:hidden;">
         <div class="input-control text" style="width:100%!important;">
-            <input id="M{{ pair.id }}_{{ subdance.id }}" type="tel" min="5" max="10" step="0.5"/>
+		<input id="M{{ pair.id }}_{{ subdance.id }}" {% if request|is_ios %}type="number" {% else %}type="tel" {% endif %} min="5" max="10" step="0.5"/>
         </div>
     </td>
     {% endfor %}
@@ -30,7 +32,7 @@
     {% for subdance in subdances %}
     <td>
         <div class="input-control text" style="width:100%!important;">
-            <input id="V{{ pair.id }}_{{ subdance.id }}" type="tel" min="5" max="10" step="0.5"/>
+            <input id="V{{ pair.id }}_{{ subdance.id }}" {% if request|is_ios %}type="number" {% else %}type="tel" {% endif %} min="5" max="10" step="0.5"/>
         </div>
     </td>
     {% endfor %}

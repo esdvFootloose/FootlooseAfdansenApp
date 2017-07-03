@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group
 from afdansen.models import *
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django_user_agents.utils import get_user_agent
 
 register = template.Library()
 
@@ -32,3 +33,11 @@ def getSubRelationObj(danceid, subdanceid):
     subd = get_object_or_404(SubDance, pk=subdanceid)
 
     return DanceSubDanceRelation.objects.get(Q(d) & Q(subd))
+
+@register.filter(name='is_ios')
+def is_ios(request):
+    user_agent = get_user_agent(request)
+    if user_agent.os.family == 'iOS':
+        return True
+    else:
+        return False

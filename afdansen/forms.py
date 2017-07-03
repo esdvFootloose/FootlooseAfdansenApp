@@ -44,14 +44,19 @@ class PairForm(forms.ModelForm):
     def clean(self):
         super().clean()
 
+        if self.instance.DoesNotExist == Pair.DoesNotExist:
+            suggestedbacknumber = getSuggestedBackNumber(self.instance, [m.Number for m in MissingBackNumber.objects.all()], cleaned_data=self.cleaned_data)
+        else:
+            suggestedbacknumber = getSuggestedBackNumber(self.instance, [m.Number for m in MissingBackNumber.objects.all()])
+
         if self.cleaned_data['BackNumber'] in [n.Number for n in MissingBackNumber.objects.all()]:
             raise ValidationError("This is a missing backnumber. Suggested number: {}"
-                                  .format(getSuggestedBackNumber(self.instance, [m.Number for m in MissingBackNumber.objects.all()])))
+                                  .format(suggestedbacknumber))
         
         for p in Pair.objects.filter(BackNumber=self.cleaned_data['BackNumber']):
             if p.LeadingRole != self.cleaned_data['LeadingRole']:
                 raise ValidationError("Backnumber should be unique for a leader. Suggested number: {}"
-                                      .format(getSuggestedBackNumber(self.instance, [m.Number for m in MissingBackNumber.objects.all()])))
+                                      .format(suggestedbacknumber))
 
         return self.cleaned_data
 
@@ -95,11 +100,14 @@ class HeatModelForm(forms.ModelForm):
 
     def clean_Number(self):
         data = self.cleaned_data['Number']
-        m = Heat.objects.all().aggregate(Max('Number'))['Number__max']
-        if data <= m:
-            return m + 1
-        else:
+        m = Heat.objects.filter(Dance=self.cleaned_data['Dance']).aggregate(Max('Number'))['Number__max']
+        if m is None:
             return data
+        else:
+            if data <= m:
+                return m + 1
+            else:
+                return data
 
     class Meta:
         model = Heat

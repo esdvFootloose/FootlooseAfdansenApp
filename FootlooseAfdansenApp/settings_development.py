@@ -32,6 +32,7 @@ LOGIN_URL = "/login/"
 # Application definition
 
 INSTALLED_APPS = [
+    'django_user_agents',
     'index.apps.IndexConfig',
     'templates.apps.TemplatesConfig',
     'django.contrib.admin',
@@ -59,6 +60,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'FootlooseAfdansenApp.urls'

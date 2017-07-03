@@ -40,7 +40,7 @@ def juryPageDance(request, danceid, heatid):
         'pairs' : h.Persons.all(),
         'dance' : d,
         'subdances' : d.SubDances.order_by('dancesubdancerelation'),
-        'heat' : heatid,
+        'heat' : h,
     })
 
 @login_required
@@ -777,5 +777,5 @@ def PrintJuryForm(request, danceid, heatid):
         'pairs': h.Persons.all(),
         'dance': d,
         'subdances': d.SubDances.order_by('dancesubdancerelation'),
-        'heat': heatid,
+        'heat': h,
     })
