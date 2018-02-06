@@ -408,7 +408,7 @@ def RecalcBackNumbers(request):
                 p.save()
             missingbacknumbers = [m.Number for m in models.MissingBackNumber.objects.all()]
             for p in models.Pair.objects.all():
-                p.BackNumber = getSuggestedBackNumber(p, missingbacknumbers, greedy=True)
+                p.BackNumber = getSuggestedBackNumber(p, missingbacknumbers)
                 p.save()
 
             return render(request, 'base.html', {

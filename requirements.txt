@@ -1,9 +1,9 @@
-django
+django<=1.11
 django-recaptcha
 django-impersonate
 django-maintenancemode
 django-redis
-channels
+channels<2
 asgi_redis
 daphne
 django-user_agents

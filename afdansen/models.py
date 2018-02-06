@@ -24,7 +24,7 @@ class SubDance(models.Model):
 
 class Dance(models.Model):
     Name = models.CharField(max_length=255)
-    Jury = models.ManyToManyField(User, related_name='jury')
+    Jury = models.ManyToManyField(User, related_name='jury', blank=True)
     SubDances = models.ManyToManyField(SubDance, related_name='dances', through='DanceSubDanceRelation')
 
     def __str__(self):

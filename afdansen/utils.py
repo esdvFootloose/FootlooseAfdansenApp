@@ -3,6 +3,8 @@ from django.db.models import Max, Q
 
 ## util functions
 def getSuggestedBackNumber(pair, missingnumbers, greedy=False, cleaned_data=None):
+    #greedy should only be used when first importing. afterwards this is returns non correct values
+
     #if the object is new, the cleaned_data is inserted from modelform so use that
     if cleaned_data is not None:
         if Pair.objects.filter(LeadingRole=cleaned_data['LeadingRole']).exclude(id=pair.id).count() > 0:
