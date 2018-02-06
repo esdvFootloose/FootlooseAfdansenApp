@@ -13,6 +13,9 @@ class Person(models.Model):
         else:
             return '{} {}'.format(str(self.FirstName).capitalize(), str(self.LastName).capitalize())
 
+    class Meta:
+        ordering = ['LastName']
+
 class SubDance(models.Model):
     Name = models.CharField(max_length=255)
     def __str__(self):
@@ -49,6 +52,9 @@ class Pair(models.Model):
 
     def __str__(self):
         return '{} with {}'.format(self.LeadingRole, self.FollowingRole)
+
+    class Meta:
+        ordering = ['LeadingRole']
 
 class Grade(models.Model):
     Pair = models.ForeignKey(Pair, on_delete=models.CASCADE, related_name='grades')

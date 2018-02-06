@@ -1,0 +1,22 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+Django = "<=1.11"
+django-recaptcha = "*"
+django-impersonate = "*"
+django-maintenancemode = "*"
+django-redis = "*"
+channels = "<2"
+asgi_redis = "*"
+daphne = "*"
+django-user_agents = "*"
+
+
+[dev-packages]
+

@@ -27,6 +27,11 @@ def getSuggestedBackNumber(pair, missingnumbers, greedy=False, cleaned_data=None
             if m not in missingnumbers:
                 return m
     else:
+        #check if the leader already has a number, then use that, otherwise iterate and find an available number
+        if pair.BackNumber != 0:
+            if Pair.objects.filter(LeadingRole=pair.LeadingRole).count() > 0:
+                return min([x.BackNumber for x in Pair.objects.filter(LeadingRole=pair.LeadingRole)])
+
         numbers = [p.BackNumber for p in Pair.objects.all()]
         m = 0
         while True:
