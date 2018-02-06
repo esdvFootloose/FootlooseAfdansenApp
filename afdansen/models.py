@@ -54,7 +54,7 @@ class Pair(models.Model):
         return '{} with {}'.format(self.LeadingRole, self.FollowingRole)
 
     class Meta:
-        ordering = ['LeadingRole']
+        ordering = ['LeadingRole', 'FollowingRole']
 
 class Grade(models.Model):
     Pair = models.ForeignKey(Pair, on_delete=models.CASCADE, related_name='grades')

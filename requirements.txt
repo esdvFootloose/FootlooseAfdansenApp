@@ -7,3 +7,4 @@ channels<2
 asgi_redis
 daphne
 django-user_agents
+openpyxl

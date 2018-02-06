@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^print/heatlist/$', views.PrintHeatList, name='printheatlist'),
     url(r'^jury/formprint/(?P<danceid>[0-9]+)/(?P<heatid>[0-9]+)/$', views.PrintJuryForm, name='printjuryform'),
     url(r'^pair/recalcbacknumbers/$', views.RecalcBackNumbers, name='recalcbacknumbers'),
+    url(r'^pair/export/$', views.ExportBackNumbers, name='pairexport'),
 ]

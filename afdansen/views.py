@@ -18,6 +18,8 @@ from itertools import chain
 from django.http import HttpResponse
 import json
 from .utils import getSuggestedBackNumber
+from general_excel import BacknumbersExcel
+from django.http.response import HttpResponse
 
 @login_required
 def juryPageDance(request, danceid, heatid):
@@ -423,6 +425,12 @@ def RecalcBackNumbers(request):
         'formtitle' : 'Confirm recalculating backnumbers',
         'buttontext' : 'Go'
     })
+
+@staff_required
+def ExportBackNumbers(request):
+    response = HttpResponse(content=BacknumbersExcel())
+    response['Content-Disposition'] = 'attachment; filename=backnumbers.xlsx'
+    return response
 
 @superuser_required
 def ImportPairs(request):
