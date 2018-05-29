@@ -1,7 +1,12 @@
-from channels.routing import route, include
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
 
-channel_routing = [
-    # include('tracking.routing.channel_routing', path=r'^/tracking/'),
-    # include('support.routing.channel_routing', path=r'^/support/'),
-    include('afdansen.routing.channel_routing', path=r'^/afdansen/'),
-]
+import afdansen.routing
+
+application = ProtocolTypeRouter({
+    'websocket' : AuthMiddlewareStack(
+        URLRouter(
+            afdansen.routing.websocket_urlpatterns
+        )
+    )
+})

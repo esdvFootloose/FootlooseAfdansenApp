@@ -545,17 +545,17 @@ def CreateJury(request):
                 dance.Jury.add(NewUser)
                 dance.save()
 
-            current_site = get_current_site(request)
-            domain = current_site.domain
-            context = {
-                'domain' : domain,
-                'uid'    : urlsafe_base64_encode(force_bytes(NewUser.pk)),
-                'user'   : NewUser,
-                'token'  : default_token_generator.make_token(NewUser),
-            }
-
-            send_mail("email/password_newuser_set_email_subject.txt", "email/password_newuser_set_email.html", context,
-                      "no-reply@afdansen.edsvfootloose.nl", NewUser.email, html_email_template_name="email/password_newuser_set_email.html")
+            # current_site = get_current_site(request)
+            # domain = current_site.domain
+            # context = {
+            #     'domain' : domain,
+            #     'uid'    : urlsafe_base64_encode(force_bytes(NewUser.pk)),
+            #     'user'   : NewUser,
+            #     'token'  : default_token_generator.make_token(NewUser),
+            # }
+            #
+            # send_mail("email/password_newuser_set_email_subject.txt", "email/password_newuser_set_email.html", context,
+            #           "no-reply@afdansen.edsvfootloose.nl", NewUser.email, html_email_template_name="email/password_newuser_set_email.html")
 
             return render(request, "base.html", { "Message" : "Jury {} created".format(username)})
     else:

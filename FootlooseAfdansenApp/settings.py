@@ -43,23 +43,23 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'captcha',
     'impersonate',
-    'maintenancemode',
+    # 'maintenancemode',
     'channels',
     'afdansen.apps.AfdansenConfig',
     'api.apps.ApiConfig',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
-    'maintenancemode.middleware.MaintenanceModeMiddleware',
+    # 'maintenancemode.middleware.MaintenanceModeMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
@@ -132,13 +132,14 @@ CACHES = {
 }
 
 #channels
+ASGI_APPLICATION = 'FootlooseAfdansenApp.routing.application'
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": ["redis://127.0.0.1:6379/2"],
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
         },
-        "ROUTING": "FootlooseAfdansenApp.routing.channel_routing",
+
     },
 }
 

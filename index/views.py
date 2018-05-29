@@ -26,7 +26,7 @@ def index(request):
 
 
 def logout(request):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         return HttpResponseRedirect('/')
     auth_logout(request)
     return render(request, "base.html", {"Message":"You are now logged out. <a href='/' title='Home'>Go back to the homepage</a>"})
@@ -131,7 +131,7 @@ def profile(request):
 
 
 def login(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return gotoNextOrHome(request)
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -165,12 +165,12 @@ def login(request):
     return render(request, "login.html", {'form': form, 'get': get})
 
 
-def error400(request):
+def error400(request, exception):
     return render(request, "base.html", status=400, context={
         "Message":"Your browser send an invalid request. Please have a look at the <a href=\"/\">homepage</a>"
     })
 
-def error404(request):
+def error404(request, exception):
     return render(request, "base.html", status=404, context={
         "Message":"The page you are looking for does not exist. Please have a look at the <a href=\"/\">homepage</a>"
     })

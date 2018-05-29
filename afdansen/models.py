@@ -46,8 +46,8 @@ class DanceSubDanceRelation(models.Model):
 
 class Pair(models.Model):
     BackNumber = models.IntegerField()
-    LeadingRole = models.ForeignKey(Person, related_name='pairs_leading')
-    FollowingRole = models.ForeignKey(Person, related_name='pairs_following')
+    LeadingRole = models.ForeignKey(Person, related_name='pairs_leading', on_delete=models.CASCADE)
+    FollowingRole = models.ForeignKey(Person, related_name='pairs_following', on_delete=models.CASCADE)
     Dances = models.ManyToManyField(Dance, related_name='pairs')
 
     def __str__(self):

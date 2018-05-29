@@ -1,10 +1,9 @@
-django<=1.11
+django
 django-recaptcha
 django-impersonate
-django-maintenancemode
 django-redis
-channels<2
-asgi_redis
+channels
 daphne
 django-user_agents
 openpyxl
+channels_redis
