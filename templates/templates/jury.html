@@ -47,6 +47,9 @@
 <script src="{% static "channels/js/websocketbridge.js" %}"></script>
 <script>
 $(document).ready(function(){
+    window.sendqueue = [];
+    window.connected = false;
+
     const webSocketBridge = new channels.WebSocketBridge();
     webSocketBridge.connect('/afdansen/jury/socket/{{ dance.id }}/');
 
@@ -82,6 +85,10 @@ $(document).ready(function(){
                 caption: 'server connection',
                 content: 'Saved grades loaded from server',
                 type: 'success'
+            });
+            window.connected = true;
+            window.sendqueue.forEach(function(e) {
+                sendUpdate(e, $('#'+e).val());
             });
             return;
         }
@@ -121,17 +128,12 @@ $(document).ready(function(){
             {
                 return;
             }
-            if(webSocketBridge.socket.readyState == 3)
+            if(window.connected)
             {
-                $.Notify({
-                    caption: 'Connection lost',
-                    content: 'Connection was lost, new input not saved. Trying to reconnect',
-                    type: 'alert'
-                })
+                sendUpdate(e.target.id, e.target.value);
             }
             else {
-                window.debug = e.target;
-                sendUpdate(e.target.id, e.target.value);
+                window.sendqueue.push(e.target.id);
             }
         });
 
@@ -143,6 +145,7 @@ $(document).ready(function(){
             content: 'Connection to server lost, trying to reconnect',
             type: 'alert'
         });
+        window.connected = false;
     };
 });
 </script>
