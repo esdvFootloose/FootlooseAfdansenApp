@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
+{% load staticfiles %}
 
 {% block body %}
 <h1>Jury Page for {{ dance }} heat {{ heat.Number }}</h1>
@@ -43,23 +44,38 @@
 
 {% block scripts %}
 {{  block.super }}
+<script src="{% static "channels/js/websocketbridge.js" %}"></script>
 <script>
 $(document).ready(function(){
-    if(window.location.protocol == "https:") {
-        window.socket = new WebSocket("wss://" + window.location.hostname + '/afdansen/jury/socket/{{ dance.id }}/');
-    }
-    else
-    {
-        window.socket = new WebSocket("ws://" + window.location.hostname + ':' + window.location.port + '/afdansen/jury/socket/{{ dance.id }}/');
+    const webSocketBridge = new channels.WebSocketBridge();
+    webSocketBridge.connect('/afdansen/jury/socket/{{ dance.id }}/');
+
+    function sendUpdate(id, value) {
+        var subject = id;
+        var packet = {
+            'dance': {{ dance.id }},
+            'pair': Number(subject.split('_')[0].substr(1)),
+            'person': subject[0],
+            'grade': value,
+            'subdance': subject.split('_')[1]
+        };
+        //console.log(packet);
+        webSocketBridge.socket.send(JSON.stringify(packet));
     }
 
-    window.socket.onmessage = function(e) {
+    webSocketBridge.socket.onmessage = function(e) {
         try {
             var pckg = JSON.parse(e.data);
             //console.log(pckg);
             for (var key in pckg) {
                 if (pckg.hasOwnProperty(key)) {
-                    $('#' + key).val(pckg[key]);
+                    if($('#' + key).val() == '') {
+                        $('#' + key).val(pckg[key]);
+                    } else {
+                        if(Number($('#' + key).val()) != pckg[key]) {
+                            sendUpdate(key, $('#' + key).val());
+                        }
+                    }
                 }
             }
             $.Notify({
@@ -91,7 +107,9 @@ $(document).ready(function(){
         }
     };
 
-    window.socket.onopen = function(e) {
+
+
+    webSocketBridge.socket.onopen = function(e) {
         $.Notify({
             caption: 'Connection succesfull',
             content: 'Connection to server established',
@@ -103,35 +121,26 @@ $(document).ready(function(){
             {
                 return;
             }
-            if(window.socket.readyState == 3)
+            if(webSocketBridge.socket.readyState == 3)
             {
                 $.Notify({
                     caption: 'Connection lost',
-                    content: 'Connection was lost, new input not saved. Please refresh page',
+                    content: 'Connection was lost, new input not saved. Trying to reconnect',
                     type: 'alert'
                 })
             }
             else {
                 window.debug = e.target;
-                var subject = e.target.id;
-                var packet = {
-                    'dance': {{ dance.id }},
-                    'pair': Number(subject.split('_')[0].substr(1)),
-                    'person': subject[0],
-                    'grade': e.target.value,
-                    'subdance': subject.split('_')[1]
-                };
-                //console.log(packet);
-                window.socket.send(JSON.stringify(packet));
+                sendUpdate(e.target.id, e.target.value);
             }
         });
 
     };
 
-    window.socket.onclose = function(e) {
+    webSocketBridge.socket.onclose = function(e) {
         $.Notify({
             caption: 'Connection lost',
-            content: 'Connection to server lost, please refresh page',
+            content: 'Connection to server lost, trying to reconnect',
             type: 'alert'
         });
     };
