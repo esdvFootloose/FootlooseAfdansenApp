@@ -41,7 +41,7 @@ h3
             </tr>
             </thead>
             <tbody>
-                {% for pair in heat.Persons.all %}
+                {% for pair in heat.pair_ordered_backnumber_set %}
                 <tr><td>{{ pair.BackNumber }}</td><td>{{ pair }}</td></tr>
                 {% endfor %}
             </tbody>

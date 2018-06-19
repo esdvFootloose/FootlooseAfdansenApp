@@ -39,7 +39,7 @@ def juryPageDance(request, danceid, heatid):
         raise PermissionDenied("not a jury")
 
     return render(request, 'jury.html', {
-        'pairs' : h.Persons.all(),
+        'pairs' : h.Persons.all().order_by('BackNumber'),
         'dance' : d,
         'subdances' : d.SubDances.order_by('dancesubdancerelation'),
         'heat' : h,
@@ -719,7 +719,7 @@ def HeatEditListDance(request, pk):
 
         return render(request, "HeatListEdit.html", {
             'heats' : models.Heat.objects.filter(Dance=dance).order_by('Number'),
-            'unboundpairs' : dance.pairs.exclude(pk__in=boundedpersons).distinct(),
+            'unboundpairs' : dance.pairs.exclude(pk__in=boundedpersons).distinct().order_by('BackNumber'),
             'dance' : dance,
         })
 
@@ -782,7 +782,7 @@ def PrintJuryForm(request, danceid, heatid):
     h = get_object_or_404(models.Heat, pk=heatid)
 
     return render(request, 'JuryFormPrint.html', {
-        'pairs': h.Persons.all(),
+        'pairs': h.Persons.all().order_by('BackNumber'),
         'dance': d,
         'subdances': d.SubDances.order_by('dancesubdancerelation'),
         'heat': h,

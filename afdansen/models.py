@@ -76,6 +76,10 @@ class Heat(models.Model):
     def short_str(self):
         return "Heat {}".format(self.Number)
 
+    @property
+    def pair_ordered_backnumber_set(self):
+        return self.Persons.all().order_by('BackNumber')
+
     def __str__(self):
         return "Heat {} for Dance {}".format(self.Number, self.Dance)
 

@@ -45,14 +45,16 @@ class PairForm(forms.ModelForm):
         super().clean()
 
         if self.instance.DoesNotExist == Pair.DoesNotExist:
-            suggestedbacknumber = getSuggestedBackNumber(self.instance, [m.Number for m in MissingBackNumber.objects.all()], cleaned_data=self.cleaned_data)
+            suggestedbacknumber = getSuggestedBackNumber(self.instance, [m.Number for m in MissingBackNumber.objects.all()], cleaned_data=self.cleaned_data, greedy=True)
         else:
             suggestedbacknumber = getSuggestedBackNumber(self.instance, [m.Number for m in MissingBackNumber.objects.all()])
-
-        if self.cleaned_data['BackNumber'] in [n.Number for n in MissingBackNumber.objects.all()]:
-            raise ValidationError("This is a missing backnumber. Suggested number: {}"
+        try:
+            if self.cleaned_data['BackNumber'] in [n.Number for n in MissingBackNumber.objects.all()]:
+                raise ValidationError("This is a missing backnumber. Suggested number: {}"
                                   .format(suggestedbacknumber))
-        
+        except KeyError:
+            raise ValidationError("No valid backnumber specified. Suggested number: {}".format(suggestedbacknumber))
+
         for p in Pair.objects.filter(BackNumber=self.cleaned_data['BackNumber']):
             if p.LeadingRole != self.cleaned_data['LeadingRole']:
                 raise ValidationError("Backnumber should be unique for a leader. Suggested number: {}"
