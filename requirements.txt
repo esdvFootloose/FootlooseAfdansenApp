@@ -1,5 +1,4 @@
 django
-django-recaptcha
 django-impersonate
 django-redis
 channels
