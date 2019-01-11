@@ -28,9 +28,9 @@ for d in ['latin', 'ballroom']:
         obj, created = Dance.objects.get_or_create(Name='{}_{}'.format(d, n))
 
 for d in ['salsa', 'zouk']:
-    for n in [1, 2, 3]:
+    for n in [1, 2, 3, 4]:
         print('{}_{}'.format(d, n))
-        obj, created = Dance.objects.get_or_create(Name='{}_{}'.format(d, n))
+        obj, created = Dance.objects.get_or_create(Name='{}{}'.format(d, n))
 
 for n in [2, 3, 4, 11, 14, 16, 19, 23, 25, 34, 37, 38, 41, 70, 73, 82, 88, 102, 106, 121,
                                       135, 136, 140, 146, 148, 150, 151, 162, 163, 164, 166, 167, 174, 180]:
