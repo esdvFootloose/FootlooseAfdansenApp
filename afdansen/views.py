@@ -455,8 +455,8 @@ def ImportPairs(request):
                     continue
                 p = models.Pair()
                 #extract the leader and followername
-                leadername = parts[2].strip('"').split(' ')
-                followername = parts[3].strip('"').split(' ')
+                leadername = parts[4].strip('"').split(' ')
+                followername = parts[5].strip('"').split(' ')
                 #check if the leader already has a personobject if not create it
                 if len(leadername) == 1:#check existance of prefix in name, if so chop it away
                     leaderobj = models.Person.objects.filter(FirstName=leadername[0])
@@ -496,12 +496,12 @@ def ImportPairs(request):
                 p.save()
                 #add dances that this pair dances
                 #take special care for ballroom and latin to translate to english names
-                if 'stijldansen' in parts[4].strip('"'):
-                    graad = parts[4].strip('"').split(' ')[1]
+                if 'salsa' not in parts[6].strip('"') and 'zouk' not in parts[6].strip('"'):
+                    graad = parts[6].strip('"').split(' ')[1]
                     p.Dances.add(models.Dance.objects.get(Name="latin_{}".format(graad)))
                     p.Dances.add(models.Dance.objects.get(Name="ballroom_{}".format(graad)))
                 else:
-                    p.Dances.add(models.Dance.objects.get(Name=parts[4].strip('"').replace(' ', '_')))
+                    p.Dances.add(models.Dance.objects.get(Name=parts[6].strip('"').replace(' ', '_')))
 
                 p.save()
             return render(request, 'base.html', {

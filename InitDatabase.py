@@ -23,7 +23,7 @@ from afdansen.models import *
 
 print('Saving dance types')
 for d in ['latin', 'ballroom']:
-    for n in ['brons', 'zilver', 'zilverster', 'goud', 'topklasse']:
+    for n in ['bronze', 'silver', 'silverstar', 'gold', 'topclass']:
         print('{}_{}'.format(d, n))
         obj, created = Dance.objects.get_or_create(Name='{}_{}'.format(d, n))
 
