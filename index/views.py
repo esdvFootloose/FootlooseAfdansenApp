@@ -156,7 +156,7 @@ def login(request):
             else:
                 return render(request, "base.html", {
                     "Message": "Login failed, incorrect password. Please <a href='" + reverse(
-                        "index:login") + "'>try again</a> or <a href='" + reverse("index:password_reset") + "'>reset your password</a>"})
+                        "index:login") + "'>try again</a>"})
     form = LoginForm()
     get = ''
     if 'next' in request.GET.keys():
@@ -181,7 +181,7 @@ def error403(request, exception):
 def error500(request):
     return render(request, "base.html", status=500, context={
         "Message" : "Something went wrong in the server. The developer team has been automatically notified. </br>"
-                    "Please help them by sending an email to <a href=\"mailto:info@FootlooseAfdansenApp.nl?subject=BugReport\">info@FootlooseAfdansenApp.nl</a> with more information what you were trying to do. <br/>"
+                    "Please help them by sending an email to <a href=\"mailto:ict@esdvfootloose.nl?subject=BugReport\">ict@esdvfootloose.nl</a> with more information what you were trying to do. <br/>"
                     "Thanks in advance!"
     })
 
