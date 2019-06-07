@@ -496,7 +496,8 @@ def ImportPairs(request):
                 p.save()
                 #add dances that this pair dances
                 #take special care for ballroom and latin to translate to english names
-                if 'salsa' not in parts[6].strip('"') and 'zouk' not in parts[6].strip('"'):
+                #TODO: take out this horrible hardcoded check
+                if 'salsa' not in parts[6].strip('"') and 'zouk' not in parts[6].strip('"') and 'kizomba' not in parts[6].strip('"'):
                     # graad = parts[6].strip('"').split(' ')[1]
                     graad = parts[6].strip('"')
                     p.Dances.add(models.Dance.objects.get(Name="latin_{}".format(graad)))
