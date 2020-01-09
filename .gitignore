@@ -1,6 +1,5 @@
 __pycache__
 .idea/
-migrations/
 *.pyc
 *.sqlite3
 templates/static/admin/
